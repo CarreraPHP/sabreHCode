@@ -37,7 +37,7 @@ Ext.define('MyApp.view.SingleChoiceResultView', {
                     '<div>',
                     '<span><b>Question:</b></span>',
                     '<span><b>{ques_name}</b></span>',
-                    '</div>',
+                    '</div> <br />',
                     '<div>',
                     '<span><b>Selected Ans : </b></span>',
                     '<tpl for="sel_ans"><span> {#} . {sel_ans}</span><br /><br /></tpl>',
@@ -49,7 +49,7 @@ Ext.define('MyApp.view.SingleChoiceResultView', {
                     '<div>',
                     '<span><b>Result : </b></span>',
                     '<span><img src={icon} /></sapn>',
-                    '</div>',
+                    '</div> <br />',
                     '</div>',
                     '</tpl>'
                     ],

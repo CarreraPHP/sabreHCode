@@ -31,16 +31,36 @@ Ext.define('App.controller.wsControl', {
 				
 				if(record.data.parent.indexOf(" ") != -1){
 					iframeUrl += record.data.parent.replace(/ /g, "/") + "/";
-				}else{
-					iframeUrl += record.data.parent + "/";
 				}
 				
 				if(record.data.name.indexOf(" ") != -1){
 					iframeUrl += record.data.name.replace(/ /g, "_") + "/";
-				}else{
-					iframeUrl += record.data.name + "/";
-				}				
-				this.getIframePage().el.dom.src = iframeUrl;				
+				}
+				
+//				console.log(record.data, iframeUrl);
+				
+				this.getIframePage().el.dom.src = iframeUrl;
+				
+        if(record.raw.id == 20){
+            panel.getLayout().setActiveItem(0);
+            panel.doLayout();
+        }else if(record.raw.id == 25){
+            panel.getLayout().setActiveItem(1);
+            panel.doLayout();
+        }
+//            childComponent = Ext.create('App.view.DayOneView', {
+//                itemId : '#border-layout',
+//                title : 'Border Layout',
+//                closable : true
+//            });
+//            parentTab.add(childComponent);
+//            parentTab.getLayout().setActiveItem('#border-layout');
+//            childComponent.doLayout();
+//            parentTab.doLayout();
+//        }
+        
+        
+        
     },
     borderLayoutSource : function(me, pressed, opts){
         var panel = this.getPanel();

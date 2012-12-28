@@ -36,7 +36,7 @@ Ext.define('MyApp.view.ContentFlashView', {
 		child.flashParams = {allowFullScreen: true};
 		if(loadedData.type != 'FLASH'){
 			child.flashVars = {src : loadedData.text, autoPlay : false, controlBarAutoHide: false};
-			child.url = 'js/lib/player/SMP/for Flash Player 10.0/StrobeMediaPlayback.swf';
+			child.url = '../library/player/SMP/for Flash Player 10.0/StrobeMediaPlayback.swf';
 		}else{
 			child.url = loadedData.text;
 		}
@@ -118,7 +118,7 @@ Ext.define('MyApp.view.ContentFlashView', {
 										if(loadedData.type != 'FLASH'){
 											console.log(loadedData.type);
 											child.flashVars = {src : loadedData.text, autoPlay : false, controlBarAutoHide: false};
-											child.url = 'js/lib/player/SMP/for Flash Player 10.0/StrobeMediaPlayback.swf';
+											child.url = '../library/player/SMP/for Flash Player 10.0/StrobeMediaPlayback.swf';
 										}else{
 											child.url = loadedData.text;
 										}

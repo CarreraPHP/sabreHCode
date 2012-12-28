@@ -7,7 +7,8 @@ Ext.define('MyApp.view.EditSingleChoiceQuizView', {
     alias : 'widget.editsinglechoicequizview',
     requires: [
     'MyApp.view.quiz.form.SingleChoiceView',
-    'MyApp.view.quiz.form.MultipleChoiceView'
+    'MyApp.view.quiz.form.MultipleChoiceView',
+    'MyApp.view.quiz.form.MatchView'
     ],
     autoScroll : true,
     border : false,
@@ -56,6 +57,9 @@ Ext.define('MyApp.view.EditSingleChoiceQuizView', {
                 },{
                     xtype : 'multiplechoicequizformview',
                     itemId : 'addMultipleQuiz'
+                },{
+                    xtype : 'matchingquizformview',
+                    itemId : 'addMatchingQuiz'
                 }]                
             }]
         });

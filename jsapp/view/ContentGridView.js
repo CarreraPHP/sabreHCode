@@ -12,7 +12,7 @@ Ext.define('MyApp.view.ContentGridView', {
         var me = this;
 
         var rowEditingInstance = Ext.create('Ext.grid.plugin.RowEditing', {
-            clicksToEdit : 3,
+            clicksToEdit : 2,
             listeners : {
                 edit : function(editor, e, opts) {
                     Ext.create('Ext.ux.window.Notification', {
@@ -277,18 +277,14 @@ Ext.define('MyApp.view.ContentGridView', {
                                                                         });
                                                                     }
                                                                 }else if(records.quiz_id == "2"){
-                                                                    console.log(records);
                                                                     var ques = Ext.create('Ext.form.Label', {
-                                                                        html : "<div><b>Que : " + records.p_name + "</b></div><br />"
+                                                                        html : "<div><b>Que : " + records.name + "</b></div><br />"
                                                                     });
                                                                     var page = Ext.create('Ext.form.field.Hidden', {
                                                                         name : 'module',
                                                                         value : 'saveQuiz'
                                                                     });
-                                                                    var queId = Ext.create('Ext.form.field.Hidden', {
-                                                                        name : 'que_id',
-                                                                        value : records.ques_id
-                                                                    });
+                                                                    
                                                                     var course_id = Ext.create('Ext.form.field.Hidden', {
                                                                         name : 'course_id',
                                                                         value : records.course_id
@@ -307,69 +303,38 @@ Ext.define('MyApp.view.ContentGridView', {
                                                                     });
                                                                     QuizComponent.add(ques);
                                                                     QuizComponent.add(page);
-                                                                    QuizComponent.add(queId);
                                                                     QuizComponent.add(course_id);
                                                                     QuizComponent.add(topic_id);
                                                                     QuizComponent.add(content_id);
                                                                     QuizComponent.add(quiz_type);
-                                                                    QuizComponent.add(Ext.create('Ext.Panel', {
-                                                                        width        : 400,
-                                                                        border : false,
-                                                                        height : 150,
-                                                                        layout       : {
-                                                                            type: 'hbox',
-                                                                            align: 'stretch',
-                                                                            padding: 5
-                                                                        },
-                                                                        items        : [{
-                                                                            xtype : 'grid',
-                                                                            border : false,
-                                                                            flex: 1,
-                                                                            itemId : 'matQues',
-                                                                            store : Ext.create('MyApp.store.matchQuesStore'),
-                                                                            columns: [{
-                                                                                header: 'question',
-                                                                                dataIndex: 'ques_name',
-                                                                                flex: true
-                                                                            }]
-                                                                        },{
-                                                                            xtype : 'grid',
-                                                                            flex: 1,
-                                                                            border : false,
-                                                                            itemId : 'matAns',
-                                                                            store : Ext.create('MyApp.store.matchAnsStore'),
-                                                                            columns: [{
-                                                                                header: 'Answer',
-                                                                                dataIndex: 'ans_name',
-                                                                                flex: true
-                                                                            },{
-                                                                                dataIndex : 'ans_id',
-                                                                                hidden : true
-                                                                            }],
-                                                                            viewConfig: {
-                                                                                plugins: {
-                                                                                    ptype: 'gridviewdragdrop',
-                                                                                    dragText: 'Choose correct place'
-                                                                                }
-                                                                            }
-                                                                        }]
-                                                                    }));
-                                                                    
-                                                                    //QuizComponent.add(form);
-                                                                    var q = Ext.ComponentQuery.query('#matQues'), dat = q[0];
-                                                                    dat.store.proxy.extraParams.course_id = records.course_id;
-                                                                    dat.store.proxy.extraParams.topic_id = records.topic_id;
-                                                                    dat.store.proxy.extraParams.content_id = records.content_id;
-                                                                    dat.store.proxy.extraParams.ques_id = records.p_id;
-                                                                    dat.store.load();
-                                                                    var a = Ext.ComponentQuery.query('#matAns'), ans = a[0];
-                                                                    ans.store.proxy.extraParams.course_id = records.course_id;
-                                                                    ans.store.proxy.extraParams.topic_id = records.topic_id;
-                                                                    ans.store.proxy.extraParams.content_id = records.content_id;
-                                                                    ans.store.proxy.extraParams.ques_id = records.p_id;
-                                                                    ans.store.load();
+                                                                    var j = 0;
+                                                                    Ext.Array.each(records.ans_name, function(rec) {
+                                                                        QuizComponent.add(Ext.create('Ext.form.ComboBox', {
+                                                                            itemId : 'matAns' + rec.ques_id,
+                                                                            name : 'Answer' +  (j+1),
+                                                                            width        : 400,
+                                                                            fieldLabel: rec.ques_name,
+                                                                            store: Ext.create('MyApp.store.matchAnsStore'),
+                                                                            queryMode: 'local',
+                                                                            editable : false,
+                                                                            displayField: 'ans_name',
+                                                                            valueField: 'ans_id'
+                                                                        }));
+                                                                        
+                                                                        
+                                                                        var a = Ext.ComponentQuery.query('#matAns'+rec.ques_id), ans = a[0];
+                                                                        ans.store.proxy.extraParams.course_id = records.course_id;
+                                                                        ans.store.proxy.extraParams.topic_id = records.topic_id;
+                                                                        ans.store.proxy.extraParams.content_id = records.content_id;
+                                                                        ans.store.proxy.extraParams.ques_id = records.p_id;
+                                                                        ans.store.load();
+                                                                        QuizComponent.add(Ext.create('Ext.form.field.Hidden', {
+                                                                            name : 'que_id'+(j+1),
+                                                                            value : rec.ques_id
+                                                                        }));
+                                                                        j = j+1;
+                                                                    });
                                                                 }
-                                                                
                                                             }
                                                             QuizComponent.doLayout();
                                                             if(recCount < 1){
@@ -485,72 +450,132 @@ Ext.define('MyApp.view.ContentGridView', {
                                                                             data : res.data
                                                                         });
                                                                         parent.add(QuizComponent);
-                                                                        var ques = Ext.create('Ext.form.Label', {
-                                                                            html : "<div><b>Que : " + records.name + "</b></div><br />"
-                                                                        });
-                                                                        var page = Ext.create('Ext.form.field.Hidden', {
-                                                                            name : 'module',
-                                                                            value : 'saveQuiz'
-                                                                        });
-                                                                        var queId = Ext.create('Ext.form.field.Hidden', {
-                                                                            name : 'que_id',
-                                                                            value : records.ques_id
-                                                                        });
-                                                                        var course_id = Ext.create('Ext.form.field.Hidden', {
-                                                                            name : 'course_id',
-                                                                            value : records.course_id
-                                                                        });
-                                                                        var topic_id = Ext.create('Ext.form.field.Hidden', {
-                                                                            name : 'topic_id',
-                                                                            value : records.topic_id
-                                                                        });
-                                                                        var content_id = Ext.create('Ext.form.field.Hidden', {
-                                                                            name : 'content_id',
-                                                                            value : records.content_id
-                                                                        });
-                                                                        var quiz_type = Ext.create('Ext.form.field.Hidden', {
-                                                                            name : 'quiz_id',
-                                                                            value : records.quiz_id
-                                                                        });
-                                                                        QuizComponent.add(ques);
-                                                                        QuizComponent.add(page);
-                                                                        QuizComponent.add(queId);
-                                                                        QuizComponent.add(course_id);
-                                                                        QuizComponent.add(topic_id);
-                                                                        QuizComponent.add(content_id);
-                                                                        QuizComponent.add(quiz_type);
-                                                                        if(records.quiz_id == "4"){
-                                                                            var ans = Ext.create('Ext.form.RadioGroup', {
-                                                                                fieldLabel : 'Ans :',
-                                                                                itemId : 'ans-' + records.ques_id,
-                                                                                allowBlank : false,
-                                                                                columns : 1,
-                                                                                vertical : true
+                                                                        if(records.quiz_id != "2"){
+                                                                            var ques = Ext.create('Ext.form.Label', {
+                                                                                html : "<div><b>Que : " + records.name + "</b></div><br />"
                                                                             });
-                                                                            QuizComponent.add(ans);
-                                                                            Ext.Array.each(records.ans, function(rec) {
-                                                                                ans.add({
-                                                                                    boxLabel : rec.ans_name,
-                                                                                    name : 'Answer',
-                                                                                    inputValue : rec.ans_id
-                                                                                })
+                                                                            var page = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'module',
+                                                                                value : 'saveQuiz'
                                                                             });
-                                                                        }else{
-                                                                            var ans = Ext.create('Ext.form.CheckboxGroup', {
-                                                                                fieldLabel : 'Ans :',
-                                                                                itemId : 'ans-' + records.ques_id,
-                                                                                allowBlank : false,
-                                                                                columns : 1,
-                                                                                vertical : true
+                                                                            var queId = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'que_id',
+                                                                                value : records.ques_id
                                                                             });
-                                                                            QuizComponent.add(ans);
-                                                                            var j = 1;
-                                                                            Ext.Array.each(records.ans, function(rec) {
-                                                                                ans.add({
-                                                                                    boxLabel : rec.ans_name,
-                                                                                    name : 'Answer' + j,
-                                                                                    inputValue : rec.ans_id
-                                                                                })
+                                                                            var course_id = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'course_id',
+                                                                                value : records.course_id
+                                                                            });
+                                                                            var topic_id = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'topic_id',
+                                                                                value : records.topic_id
+                                                                            });
+                                                                            var content_id = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'content_id',
+                                                                                value : records.content_id
+                                                                            });
+                                                                            var quiz_type = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'quiz_id',
+                                                                                value : records.quiz_id
+                                                                            });
+                                                                            QuizComponent.add(ques);
+                                                                            QuizComponent.add(page);
+                                                                            QuizComponent.add(queId);
+                                                                            QuizComponent.add(course_id);
+                                                                            QuizComponent.add(topic_id);
+                                                                            QuizComponent.add(content_id);
+                                                                            QuizComponent.add(quiz_type);
+                                                                            if(records.quiz_id == "4"){
+                                                                                var ans = Ext.create('Ext.form.RadioGroup', {
+                                                                                    fieldLabel : 'Ans :',
+                                                                                    itemId : 'ans-' + records.ques_id,
+                                                                                    allowBlank : false,
+                                                                                    columns : 1,
+                                                                                    vertical : true
+                                                                                });
+                                                                                QuizComponent.add(ans);
+                                                                                Ext.Array.each(records.ans, function(rec) {
+                                                                                    ans.add({
+                                                                                        boxLabel : rec.ans_name,
+                                                                                        name : 'Answer',
+                                                                                        inputValue : rec.ans_id
+                                                                                    })
+                                                                                });
+                                                                            }else if(records.quiz_id == "3"){
+                                                                                var ans = Ext.create('Ext.form.CheckboxGroup', {
+                                                                                    fieldLabel : 'Ans :',
+                                                                                    itemId : 'ans-' + records.ques_id,
+                                                                                    allowBlank : false,
+                                                                                    columns : 1,
+                                                                                    vertical : true
+                                                                                });
+                                                                                QuizComponent.add(ans);
+                                                                                var j = 1;
+                                                                                Ext.Array.each(records.ans, function(rec) {
+                                                                                    ans.add({
+                                                                                        boxLabel : rec.ans_name,
+                                                                                        name : 'Answer' + j,
+                                                                                        inputValue : rec.ans_id
+                                                                                    })
+                                                                                    j = j+1;
+                                                                                });
+                                                                            }
+                                                                        }else if(records.quiz_id == "2"){
+                                                                            var ques = Ext.create('Ext.form.Label', {
+                                                                                html : "<div><b>Que : " + records.name + "</b></div><br />"
+                                                                            });
+                                                                            var page = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'module',
+                                                                                value : 'saveQuiz'
+                                                                            });
+                                                                    
+                                                                            var course_id = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'course_id',
+                                                                                value : records.course_id
+                                                                            });
+                                                                            var topic_id = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'topic_id',
+                                                                                value : records.topic_id
+                                                                            });
+                                                                            var content_id = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'content_id',
+                                                                                value : records.content_id
+                                                                            });
+                                                                            var quiz_type = Ext.create('Ext.form.field.Hidden', {
+                                                                                name : 'quiz_id',
+                                                                                value : records.quiz_id
+                                                                            });
+                                                                            QuizComponent.add(ques);
+                                                                            QuizComponent.add(page);
+                                                                            QuizComponent.add(course_id);
+                                                                            QuizComponent.add(topic_id);
+                                                                            QuizComponent.add(content_id);
+                                                                            QuizComponent.add(quiz_type);
+                                                                            var j = 0;
+                                                                            Ext.Array.each(records.ans_name, function(rec) {
+                                                                                QuizComponent.add(Ext.create('Ext.form.ComboBox', {
+                                                                                    itemId : 'matAns' + rec.ques_id,
+                                                                                    name : 'Answer' +  (j+1),
+                                                                                    width        : 400,
+                                                                                    fieldLabel: rec.ques_name,
+                                                                                    store: Ext.create('MyApp.store.matchAnsStore'),
+                                                                                    queryMode: 'local',
+                                                                                    editable : false,
+                                                                                    displayField: 'ans_name',
+                                                                                    valueField: 'ans_id'
+                                                                                }));
+                                                                        
+                                                                        
+                                                                                var a = Ext.ComponentQuery.query('#matAns'+rec.ques_id), ans = a[0];
+                                                                                ans.store.proxy.extraParams.course_id = records.course_id;
+                                                                                ans.store.proxy.extraParams.topic_id = records.topic_id;
+                                                                                ans.store.proxy.extraParams.content_id = records.content_id;
+                                                                                ans.store.proxy.extraParams.ques_id = records.p_id;
+                                                                                ans.store.load();
+                                                                                QuizComponent.add(Ext.create('Ext.form.field.Hidden', {
+                                                                                    name : 'que_id'+(j+1),
+                                                                                    value : rec.ques_id
+                                                                                }));
                                                                                 j = j+1;
                                                                             });
                                                                         }

@@ -7,8 +7,8 @@ Ext.define('MyApp.view.workspaceView', {
     extend : 'Ext.panel.Panel',
     alias : 'widget.workspaceview',
     mixins : {
-		moduleLayout : 'MyApp.mixin.ModuleLayout'
-	},
+        moduleLayout : 'MyApp.mixin.ModuleLayout'
+    },
     requires : ['MyApp.view.CategoryTreeView'],
     layout : {
         type : 'border'
@@ -48,20 +48,20 @@ Ext.define('MyApp.view.workspaceView', {
                     xtype : 'addtopicview',
                     itemId : 'ws-add-topic'
                 },{
-                	xtype : 'courseaccessview',
-                	itemId : 'course-access-view'
+                    xtype : 'courseaccessview',
+                    itemId : 'course-access-view'
                 },{
-                	xtype : 'contentfullscreenview',
-                	itemId : 'content-fullscreen-view'
+                    xtype : 'contentfullscreenview',
+                    itemId : 'content-fullscreen-view'
                 },{
-                	xtype : 'forumthreadview',
-                	itemId : 'forum-thread-view'
+                    xtype : 'forumthreadview',
+                    itemId : 'forum-thread-view'
                 },{
-                	xtype : 'replyforumview',
-                	itemId : 'reply-forum-view'
+                    xtype : 'replyforumview',
+                    itemId : 'reply-forum-view'
                 },{
-                	xtype : 'contentquizview',
-                	itemId : 'content-quiz-view'
+                    xtype : 'contentquizview',
+                    itemId : 'content-quiz-view'
                 }]
             }, {
                 xtype : 'tabpanel',
@@ -77,10 +77,10 @@ Ext.define('MyApp.view.workspaceView', {
                 items : [Ext.create('MyApp.view.CategoryTreeView', {
                     // store : 'categoryTreeStore'
                     store : Ext.create('MyApp.store.categoryTreeStore', {
-                    	autoLoad: false
+                        autoLoad: false
                     })
                 })
-								, {
+                , {
                     xtype : 'panel',
                     layout : {
                         type : 'fit'
@@ -89,6 +89,7 @@ Ext.define('MyApp.view.workspaceView', {
                     items : [{
                         xtype : 'dataview',
                         itemId : 'allcoursedataview',
+                        padding : 5,
                         tpl : ['<tpl for=".">', '<div class="product">{name}</div>', '</tpl>'],
                         emptyText : 'No Course available to you',
                         itemSelector : '.product',
@@ -96,7 +97,7 @@ Ext.define('MyApp.view.workspaceView', {
                         store : Ext.create('MyApp.store.bookmarkStore')
                     }]
                 }
-							]
+                ]
             }]
         });
 

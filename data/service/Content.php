@@ -153,7 +153,7 @@ namespace sabreHcode\data\service {
 				$sql = "SELECT m1.`id` AS topic_id, m2.`id` AS content_id, m2.`text` AS content_text, m2.created_date, m3.user_email FROM `sabre`.`pt_topics` AS m1 ";
 				$sql .= "LEFT JOIN `sabre`.`pt_content` AS m2 ON m1.`id` = m2.`topic_id` ";
 				$sql .= "LEFT JOIN `sabre`.`pt_user` AS m3 ON m2.created_by = m3.id ";
-				$sql .= "WHERE m2.`type_id` = '9' AND m2.`deleted` = 'F' AND m2.topic_id = '$parent'";
+				$sql .= "WHERE m2.`type_id` = '9' AND m2.`deleted` = 'F' AND m2.topic_id = '$parent' ORDER BY created_date DESC";
 				$Result = $this -> _oDbInstance -> query($sql);
 				if ($Result -> num_rows > 0) {
 					$i = 0;

@@ -5,7 +5,7 @@
 Ext.define('MyApp.store.bookmarkStore', {
     extend: 'Ext.data.Store',
     requires: [
-        'MyApp.model.courseModel'
+    'MyApp.model.courseModel'
     ],
 
     constructor: function(cfg) {
@@ -22,7 +22,7 @@ Ext.define('MyApp.store.bookmarkStore', {
                 reader: {
                     type: 'json',
                     idProperty: 'id',
-										root: 'data'
+                    root: 'data'
                 }
             }
         }, cfg)]);

@@ -50,6 +50,9 @@ Ext.define('MyApp.controller.quizControl', {
             'editsinglechoicequizview #save-multiQuiz-but' :{
                 click : this.onAddMultipleQuiz
             },
+            'editsinglechoicequizview #save-matchQuiz-but' :{
+                click : this.onAddMatchQuiz
+            },
             'editsinglechoicequizview #quizType' : {
                 change : this.onChangeQuizType
             },
@@ -81,6 +84,9 @@ Ext.define('MyApp.controller.quizControl', {
         }else if(values.quiz_type == 3){
             form.getLayout().setActiveItem(1);
             combo.setValue(values.quiz_type);
+        }else if(values.quiz_type == 2){
+            form.getLayout().setActiveItem(2);
+            combo.setValue(values.quiz_type);
         }
         me.up('window').hide();
         var grid = Ext.ComponentQuery.query('editsinglechoicequizview #editQuizGrid')[0];
@@ -89,6 +95,7 @@ Ext.define('MyApp.controller.quizControl', {
         
     },
     onChangeQuizType : function(me, newValue, oldValue, eOpts){
+        
         var o = Ext.ComponentQuery.query('contentquizview'), parent = o[0];
         var quiz = parent.down('#edit-quiz').down('#formPanel');
         var quizContent = Ext.ComponentQuery.query('contentquizview');
@@ -113,10 +120,21 @@ Ext.define('MyApp.controller.quizControl', {
             hiddenField.setValue(record.id);
             quiz.down('#addSingleQuiz').down('combobox[name="quiz_type"]').setValue(newValue);
             quiz.getLayout().setActiveItem(0);  
+        }else if(newValue == 2){
+            var hiddenField = quiz.down('#addMatchingQuiz').down('hidden[name="course_id"]');
+            hiddenField.setValue(record.course_id);
+            hiddenField = quiz.down('#addMatchingQuiz').down('hidden[name="topic_id"]');
+            hiddenField.setValue(record.topic_id);
+            hiddenField = quiz.down('#addMatchingQuiz').down('hidden[name="content_id"]');
+            hiddenField.setValue(record.id);
+            quiz.down('#addMatchingQuiz').down('combobox[name="quiz_type"]').setValue(newValue);
+            quiz.getLayout().setActiveItem(2);  
         }
     },
     onQuizGridSelect : function(me, record, index, opts){
         var data = record.raw;
+        var o = Ext.ComponentQuery.query('contentquizview'), parent = o[0];
+        var quiz = parent.down('#edit-quiz').down('#formPanel');
         if(data.quiz_id == '4'){
             var o = Ext.ComponentQuery.query('contentquizview #addSingleQuiz'), form = o[0];
             form.getForm().reset();
@@ -156,6 +174,30 @@ Ext.define('MyApp.controller.quizControl', {
                     }
                 }
             }
+            quiz.getLayout().setActiveItem(1);
+        }else if(data.quiz_id == '2'){
+            var o = Ext.ComponentQuery.query('contentquizview #addMatchingQuiz'), form = o[0];
+            form.getForm().reset();
+            form.down('combobox[name="quiz_type"]').setValue(data.quiz_id);
+            form.down('textfield[name="p_question"]').setValue(data.name);
+            form.down('textfield[name="ques1"]').setValue(data.ques_name[0].ques_name);
+            form.down('textfield[name="answer1"]').setValue(data.ans_name[0].ans_name);
+            form.down('textfield[name="c_answer1"]').setValue(data.cor_ans[0].cor_ans);
+            form.down('textfield[name="ques2"]').setValue(data.ques_name[1].ques_name);
+            form.down('textfield[name="answer2"]').setValue(data.ans_name[1].ans_name);
+            form.down('textfield[name="c_answer2"]').setValue(data.cor_ans[1].cor_ans);
+            form.down('textfield[name="ques3"]').setValue(data.ques_name[2].ques_name);
+            form.down('textfield[name="answer3"]').setValue(data.ans_name[2].ans_name);
+            form.down('textfield[name="c_answer3"]').setValue(data.cor_ans[2].cor_ans);
+            form.down('textfield[name="ques4"]').setValue(data.ques_name[3].ques_name);
+            form.down('textfield[name="answer4"]').setValue(data.ans_name[3].ans_name);
+            form.down('textfield[name="c_answer4"]').setValue(data.cor_ans[3].cor_ans);
+            form.down('textfield[name="ques5"]').setValue(data.ques_name[4].ques_name);
+            form.down('textfield[name="answer5"]').setValue(data.ans_name[4].ans_name);
+            form.down('textfield[name="c_answer5"]').setValue(data.cor_ans[4].cor_ans);
+            form.down('hiddenfield[name="id"]').setValue(data.p_id);
+            quiz.getLayout().setActiveItem(2);
+            
         }
     },
     onAddAnswerField : function(me, e, opts){
@@ -174,7 +216,6 @@ Ext.define('MyApp.controller.quizControl', {
     onAddSingleQuiz : function(me, e, opts){
         var form = me.up('form').getForm();
         var values = me.up('form').getValues();
-        console.log(values);
         if(form.isValid()){
             Ext.Ajax.request({
                 url : 'data/QuizData.php',
@@ -251,14 +292,41 @@ Ext.define('MyApp.controller.quizControl', {
             });
         }
     },
+    onAddMatchQuiz : function(me, e, opts){
+        var form = me.up('form').getForm();
+        var values = me.up('form').getValues();
+        if(form.isValid()){
+            Ext.Ajax.request({
+                url : 'data/QuizData.php',
+                method : 'post',
+                type : 'json',
+                params : values,
+                scope : this,
+                failure : function(response) {
+                    this.createNotification(lang.logout, lang.failure.logout, 'error', 't');
+                },
+                success : function(response) {
+                    var res = Ext.decode(response.responseText);
+                    var o = Ext.ComponentQuery.query('contentquizview #editQuizGrid'), grid = o[0];
+                    grid.store.proxy.extraParams.course_id = values.course_id;
+                    grid.store.proxy.extraParams.topic_id = values.topic_id;
+                    grid.store.proxy.extraParams.content_id = values.content_id;
+                    grid.store.load();
+                    me.up('form').getForm().reset();
+                    var form = me.up('form');
+                    form.setTitle('Question information');
+                    form.down('hiddenfield[name="id"]').setValue('new');
+                    form.down('hiddenfield[name="course_id"]').setValue(values.course_id);
+                    form.down('hiddenfield[name="topic_id"]').setValue(values.topic_id);
+                    form.down('hiddenfield[name="content_id"]').setValue(values.content_id);
+                    
+                }
+            });
+        }
+    },
     onNextView : function(me, e, opts){
         var values = me.up('form').getValues();
         var form = me.up('form').getForm();
-        if(values.quiz_id != 2){
-            var ans = me.up('form').down('#matAns');
-            console.log(ans);
-            ;
-        }
         if(form.isValid()){
             Ext.Ajax.request({
                 url : 'data/QuizData.php',
@@ -310,6 +378,9 @@ Ext.define('MyApp.controller.quizControl', {
                 }
             });
         }
+        
+       
+        
     },
     onPrevView : function(me, e, opts){
         var o = Ext.ComponentQuery.query('contentquizview'), parent = o[0];

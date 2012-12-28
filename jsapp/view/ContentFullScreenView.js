@@ -61,7 +61,7 @@ Ext.define('MyApp.view.ContentFullScreenView', {
 					autoPlay : false,
 					controlBarAutoHide : false
 				};
-				child.url = 'js/lib/player/SMP/for Flash Player 10.0/StrobeMediaPlayback.swf';
+				child.url = '../library/player/SMP/for Flash Player 10.0/StrobeMediaPlayback.swf';
 			} else {
 				child.url = loadedData.text;
 			}
@@ -105,7 +105,7 @@ Ext.define('MyApp.view.ContentFullScreenView', {
 					itemId : 'htmlContent',
 					autoScroll : true,
 					bodyPadding : 5,
-					tpl : ['<div>{text}</div>'],
+					tpl : ['<div>{text}</div>']
 				}, {
 					xtype : 'panel',
 					layout : 'fit',
@@ -188,7 +188,6 @@ Ext.define('MyApp.view.ContentFullScreenView', {
 							}
 							if(rIndex < storeCount) {
 								var rec = grid.getStore().getAt(index + 1);
-								console.log(rec);
 								me.SelectedRecord = rec;
 								me.loadRecord(rec);
 								var o = Ext.ComponentQuery.query('contentfullscreenview button[iconCls="prev-button"]'), but = o[0];
