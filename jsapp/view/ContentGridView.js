@@ -27,7 +27,7 @@ Ext.define('MyApp.view.ContentGridView', {
                         iconCls : 'ux-notification-icon-information',
                         position : 't',
                         spacing : 20,
-                        html : 'Row has been edited.'
+                        html : lang.editSuccess
                     }).show();
                 }
             }

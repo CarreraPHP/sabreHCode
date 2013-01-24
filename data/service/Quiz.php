@@ -899,6 +899,10 @@ namespace sabreHcode\data\service {
             }
             return array("data" => $quizType);
         }
+        
+        public function removeQuiz(){
+            
+        }
 
     }
 

@@ -87,7 +87,8 @@ Ext.define('MyApp.view.applicationBase', {
 					listeners : {
 						select : function(combo, record) {
 							categorySelectedId = this.getSubmitValue();
-							window.location = "index.php?lang=" + categorySelectedId;
+                                                        console.log(categorySelectedId);
+							window.location = "app.php?lang=" + categorySelectedId;
 						}
 					}
 				}, {

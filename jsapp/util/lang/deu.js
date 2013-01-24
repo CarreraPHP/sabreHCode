@@ -111,6 +111,9 @@ lang = {
 		addCategory : 'hinzufügen - Kategorien',
 		addCourse : 'hinzufügen - Kurs'
 	},
-	bookmarks: 'Bookmarks',
-	addToBookmark: 'add to Bookmark'
+	bookmarks: 'Lesezeichen',
+	addToBookmark: 'zu den Favoriten hinzufügen',
+        homeScreen : 'Startbildschirm',
+        forum : 'Forum',
+        editSuccess : 'Row bearbeitet wurde.'
 };

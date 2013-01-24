@@ -96,7 +96,12 @@ lang = {
 		addCategory : 'சேர் - தொகுப்பு',
 		addCourse : 'சேர் - பாடம்'
 	},
-	bookmarks: 'Bookmarks',
-	addToBookmark: 'add to Bookmark'
+	bookmarks: 'புக்மார்க்',
+	addToBookmark: 'புக்மார்க் சேர்',
+        homeScreen : 'முகப்பு திரையில்',
+        firstname : 'முதல் பெயர்',
+        lastname : 'கடைசி பெயர்',
+        forum : 'மன்றம்',
+        editSuccess :  'வரிசை திருத்தப்பட்டது.'
 };
 

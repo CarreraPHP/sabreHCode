@@ -107,6 +107,9 @@ require_once '../configuration/Application.php';
                     case 'matchQuiz' :
                         $returnVal = QuizData::matchQuiz($course_id, $topic_id, $content_id, $ques_id);
                         break;
+                    case 'removeQuiz' :
+                        $returnVal = QuizData::removeQuiz($ques_id);
+                        break;
                     default:
                         $returnVal = QuizData::saveQuiz($_POST);
                         break;
@@ -134,6 +137,14 @@ require_once '../configuration/Application.php';
             $oQuizInstance = new Quiz(Database::load());
             $aMatchQuizQues= $oQuizInstance->getMatchQuizQues($course_id, $topic_id, $content_id, $ques_id);
             return $aMatchQuizQues;
+        }
+        
+        public static function removeQuiz($ques_id) {
+            \sabreHcode\configuration\Application::load("\sabreHcode\data\service\Quiz");
+
+            $oQuizInstance = new Quiz(Database::load());
+            $aRemoveQuiz= $oQuizInstance->removeQuiz($ques_id);
+            return $aRemoveQuiz;
         }
         public static function quiz($type, $course_id, $topic_id, $content_id) {
             \sabreHcode\configuration\Application::load("\sabreHcode\data\service\Quiz");

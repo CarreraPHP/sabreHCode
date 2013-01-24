@@ -4,7 +4,7 @@ Ext.define('MyApp.view.HomeScreenView', {
     mixins : {
 		moduleLayout : 'MyApp.mixin.ModuleLayout'
 	},
-    title : 'Home Screen',
+    title : lang.homeScreen,
     requires: [
     'MyApp.view.dBoardColumnComponent',
     'MyApp.view.dBoardPortletComponent',

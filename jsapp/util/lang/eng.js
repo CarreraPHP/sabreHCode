@@ -111,5 +111,7 @@ lang = {
 		addCourse : 'Add - Course'
 	},
 	bookmarks: 'Bookmarks',
-	addToBookmark: 'add to Bookmark'
+	addToBookmark: 'add to Bookmark',
+        homeScreen : 'Home Screen',
+        editSuccess : 'Row has been edited.'
 };
